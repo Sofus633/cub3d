@@ -212,7 +212,13 @@ int main(void){
 	gdata.win = win;
 	gdata.buffer = t_new_image(mlx, 800, 800);
 	gdata.player = (t_player){(t_vector2){10 ,10}, 0.};
-	
+	gdata.map = malloc((HEIGHT / CELL_SIZE) * sizeof(int *));
+	for (int y = 0 ; y < HEIGHT; y += CELL_SIZE)
+	{
+		for (int x = 0; x < WIDTH; x += CELL_SIZE){
+			gdata.map[y] = malloc((WIDTH))
+		}
+	}
 	mlx_hook(win, 2, 1L << 1, key_press, &gdata);
 	mlx_hook(win, 3, 1L << 0, key_rel, &gdata);
 	mlx_loop_hook(mlx, loop, &gdata);
