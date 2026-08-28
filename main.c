@@ -11,6 +11,7 @@
 #define W 'w'
 #define SPACE ' '
 #define TURN_FORCE .01
+#define SPEED .1
 
 typedef struct s_vector
 {
@@ -42,6 +43,7 @@ typedef struct t_game
 	void *win;
 	t_image *buffer;
 	t_player player;
+	int **map;
 	int			key_release[256];
 }t_game ;
 
@@ -176,6 +178,25 @@ void	draw_line(t_image *img, t_vector2 vec1, t_vector2 vec2, int color)
 	}
 }
 
+t_vector2 get_vectdir(t_vector2 start, t_vector2 end)
+{
+	t_vector2 dirrection = (t_vector2){start.x - end.x, start.y - end.y});
+	return ((t_vector2){dirrection.x/dirrection.x, dirrection.y/dirrection.y});
+}
+
+void trace_ray(t_vector2 start, t_vector2 end, t_game *gdata)
+{
+	//t_vector2 cell_check = (t_vector2){};
+	while (gdata->map[(int)(start.y / CELL_SIZE)][(int)(start.x / CELL_SIZE)] != 1)
+	{
+		if (start.x - (start.x / CELL_SIZE) * CELL_SIZE < start.y - (start.y / CELL_SIZE) * CELL_SIZE)
+		{
+			start.x += start.x - (start.x / CELL_SIZE) * CELL_SIZE;
+			start.y += start.y - (start.y / CELL_SIZE) * CELL_SIZE;
+		}
+	}
+}
+
 int loop(t_game *gdata)
 {
 	clean_buffer(gdata->buffer, 0);
@@ -183,7 +204,10 @@ int loop(t_game *gdata)
 	{
 		for (int x = 0; x < WIDTH; x += CELL_SIZE)
 		{
-			dis_rec(gdata->buffer, (t_vector2){x, y}, (t_vector2){CELL_SIZE - 1, CELL_SIZE - 1}, 125);
+			if (gdata->map[y/CELL_SIZE][x/CELL_SIZE] == 0)
+				dis_rec(gdata->buffer, (t_vector2){x, y}, (t_vector2){CELL_SIZE - 1, CELL_SIZE - 1}, 125);
+			else 
+				dis_rec(gdata->buffer, (t_vector2){x, y}, (t_vector2){CELL_SIZE - 1, CELL_SIZE - 1}, 1000);
 		}
 	}
 
@@ -193,8 +217,8 @@ int loop(t_game *gdata)
 		gdata->player.dirrection -= TURN_FORCE;
 	if (gdata->key_release[W] == 1)
 	{
-		gdata->player.pos.x += cos(gdata->player.dirrection);
-		gdata->player.pos.y += sin(gdata->player.dirrection);
+		gdata->player.pos.x += cos(gdata->player.dirrection) * SPEED;
+		gdata->player.pos.y += sin(gdata->player.dirrection) * SPEED;
 	}
 	dis_rec(gdata->buffer, (t_vector2){gdata->player.pos.x, gdata->player.pos.y}, (t_vector2){CELL_SIZE, CELL_SIZE}, 255);
 	draw_line(gdata->buffer, (t_vector2){gdata->player.pos.x + CELL_SIZE / 2, gdata->player.pos.y + CELL_SIZE / 2}, (t_vector2){gdata->player.pos.x + CELL_SIZE /2 + (CELL_SIZE * cos(gdata->player.dirrection)),gdata->player.pos.y + CELL_SIZE / 2 + (CELL_SIZE * sin(gdata->player.dirrection))}, 254);
@@ -213,10 +237,13 @@ int main(void){
 	gdata.buffer = t_new_image(mlx, 800, 800);
 	gdata.player = (t_player){(t_vector2){10 ,10}, 0.};
 	gdata.map = malloc((HEIGHT / CELL_SIZE) * sizeof(int *));
-	for (int y = 0 ; y < HEIGHT; y += CELL_SIZE)
+	for (int y = 0 ; y < HEIGHT / CELL_SIZE; y++)
 	{
-		for (int x = 0; x < WIDTH; x += CELL_SIZE){
-			gdata.map[y] = malloc((WIDTH))
+		gdata.map[y] = malloc((WIDTH / CELL_SIZE) * sizeof(int));
+		for (int x = 0; x < WIDTH / CELL_SIZE; x++){
+			gdata.map[y][x] = 0;
+			if (y == 5)
+				gdata.map[y][x] = 1;
 		}
 	}
 	mlx_hook(win, 2, 1L << 1, key_press, &gdata);
