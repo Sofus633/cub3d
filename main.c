@@ -178,13 +178,13 @@ void	draw_line(t_image *img, t_vector2 vec1, t_vector2 vec2, int color)
 	}
 }
 
-t_vector2 get_vectdir(t_vector2 start, t_vector2 end)
+/*t_vector2 get_vectdir(t_vector2 start, t_vector2 end)
 {
 	t_vector2 dirrection = (t_vector2){start.x - end.x, start.y - end.y});
 	return ((t_vector2){dirrection.x/dirrection.x, dirrection.y/dirrection.y});
-}
+*/
 
-void trace_ray(t_vector2 start, t_vector2 end, t_game *gdata)
+/*void trace_ray(t_vector2 start, t_vector2 end, t_game *gdata)
 {
 	//t_vector2 cell_check = (t_vector2){};
 	while (gdata->map[(int)(start.y / CELL_SIZE)][(int)(start.x / CELL_SIZE)] != 1)
@@ -195,7 +195,7 @@ void trace_ray(t_vector2 start, t_vector2 end, t_game *gdata)
 			start.y += start.y - (start.y / CELL_SIZE) * CELL_SIZE;
 		}
 	}
-}
+}*/
 
 int loop(t_game *gdata)
 {
