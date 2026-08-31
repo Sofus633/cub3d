@@ -2,11 +2,15 @@ CC = cc
 EXTERNAL_LIB = -lm
 SOURCE = ./source
 UTILS = ./utils
-SRC = main.c
+SRC = main.c lib/collision/clipping.c \
+			lib/graphics/image_manip.c lib/graphics/shapes.c \
+			lib/key_handling/key_handling.c \
+			lib/object/player.c \
+			lib/vector/vector2.c 
 OBJ = $(SRC:.c=.o)
 NAME = cub3d
 
-MLX_DIR = ./mlx_linux
+MLX_DIR = ./lib/mlx_linux
 
 CFLAGS = -Wall -Wextra -Werror -I$(MLX_DIR) -g -std=gnu99
 LDFLAGS = -L$(MLX_DIR) -L/usr/lib $(EXTERNAL_LIB)
