@@ -37,12 +37,12 @@ int	key_rel(int key_code, void *param)
 void event_on_keys(t_game *data)
 {
 	if (data->key_release[D] == 1)
-		data->player.dirrection += TURN_FORCE;
+		data->player.vel.x += SPEED;
+	//data->player.dirrection += TURN_FORCE;
 	if (data->key_release[A] == 1)
-		data->player.dirrection -= TURN_FORCE;
+		data->player.vel.x -= SPEED;
+	if (data->key_release[S] == 1)
+		data->player.vel.y += SPEED;
 	if (data->key_release[W] == 1)
-	{
-		data->player.vel.x += cos(data->player.dirrection) * SPEED;
-		data->player.vel.y += sin(data->player.dirrection) * SPEED;
-	}
+		data->player.vel.y -= SPEED;
 }
