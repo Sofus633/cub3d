@@ -42,7 +42,13 @@ int main(void){
 		gdata.map[y] = malloc((WIDTH / CELL_SIZE) * sizeof(int));
 		for (int x = 0; x < WIDTH / CELL_SIZE; x++){
 			gdata.map[y][x] = 0;
-			if (y == 0 || y == (HEIGHT / CELL_SIZE) - 1 || x == 0 || x == (WIDTH / CELL_SIZE) - 1)
+			if (y == 0 || y == (HEIGHT / CELL_SIZE) - 1 || x == 0 || x == (WIDTH / CELL_SIZE) - 1 ||
+				(y == 5 && (x < 10 || x > 30))  ||
+				(y == 30 && (x < 40 || x > 500))||
+				(y == 40 && (x < 30 || x > 60)) ||
+				(y == 60 && (x < 5 || x > 20))  ||
+				(y == 20 && (x < 0 || x > 30))
+			)
 				gdata.map[y][x] = 1;
 		}
 	}

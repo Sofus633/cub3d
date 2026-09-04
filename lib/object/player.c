@@ -42,11 +42,18 @@ void cast_all_rays(t_game *gdata)
   float dirrection = gdata->player.dirrection;
   float offset = (FOV / NB_RAY) * (M_PI / 180);
   int i = 0;
+	t_vector2 last = (t_vector2){0, 0};
+	t_vector2 actual = (t_vector2){0, 0};
+
   while (i < NB_RAY)
   {
     i++;
-    draw_line(gdata->buffer, center, cast_ray(gdata->player.pos, dirrection, gdata), 254);
-    dirrection += offset;
+		actual = cast_ray(gdata->player.pos, dirrection, gdata);
+    draw_line(gdata->buffer, center, actual, 254);
+		if (last.x != 0 && last.y != 0)
+			draw_line(gdata->buffer, last, actual, 10);
+    last = actual;
+		dirrection += offset;
   }
 }
 

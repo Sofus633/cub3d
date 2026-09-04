@@ -46,3 +46,4 @@ void	dis_rec(t_image *img, t_vector2 pos, t_vector2 size, int color)
 		y++;
 	}
 }
+
