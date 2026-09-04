@@ -18,7 +18,7 @@ typedef struct t_game
 	t_image *buffer;
 	t_player player;
 	int **map;
-	int			key_release[256];
+	int			key_release[65536];
 }t_game ;
 
 #endif // !GAME_STRUCT

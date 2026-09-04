@@ -17,8 +17,14 @@
 # define S 's'
 # define W 'w'
 # define SPACE ' '
+# define ARROW_UP 65362
+# define ARROW_DOWN 65364
+# define ARROW_LEFT 65361
+# define ARROW_RIGHT 65363
 # define TURN_FORCE .01
 # define SPEED .5
-# define FRICTION .01
+# define FRICTION .91
+# define FOV 90
+# define NB_RAY 90
 
 #endif

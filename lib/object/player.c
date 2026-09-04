@@ -1,4 +1,30 @@
 #include "player.h"
+
+t_vector2 direction_vector(double angle, t_vector2 pos)
+{
+	t_vector2 dir = {cos(angle), sin(angle)};
+	float manhattan = fabs(dir.x) + fabs(dir.y);
+	t_vector2 out;
+
+	(void)pos;
+	out.x = dir.x * (CELL_SIZE / manhattan);
+	out.y = dir.y * (CELL_SIZE / manhattan);
+	return out;
+}
+
+t_vector2 cast_ray(t_vector2 start, float angle, t_game *data)
+{
+	t_vector2 dvec = direction_vector(angle, start);
+	int guard = (WIDTH / CELL_SIZE) * (HEIGHT / CELL_SIZE);
+
+	while (guard-- > 0
+		&& start.x >= 0 && start.x < WIDTH
+		&& start.y >= 0 && start.y < HEIGHT
+		&& !wall_on(start, data))
+		start = *v_add(&start, dvec);
+	return start;
+}
+
 void update_player(t_game *gdata)
 {
 	t_vector2 old_pos = gdata->player.pos;
@@ -10,10 +36,25 @@ void update_player(t_game *gdata)
 	v_mul_scal(&gdata->player.vel, FRICTION);
 }
 
+void cast_all_rays(t_game *gdata)
+{
+	t_vector2 center = {gdata->player.pos.x + CELL_SIZE / 2, gdata->player.pos.y + CELL_SIZE / 2};
+  float dirrection = gdata->player.dirrection;
+  float offset = (FOV / NB_RAY) * (M_PI / 180);
+  int i = 0;
+  while (i < NB_RAY)
+  {
+    i++;
+    draw_line(gdata->buffer, center, cast_ray(gdata->player.pos, dirrection, gdata), 254);
+    dirrection += offset;
+  }
+}
+
 void display_player(t_game *gdata)
 {
+
 	dis_rec(gdata->buffer, (t_vector2){gdata->player.pos.x, gdata->player.pos.y}, (t_vector2){CELL_SIZE, CELL_SIZE}, 255);
 	if (is_clipping(gdata->player.clipping))
 		dis_rec(gdata->buffer, (t_vector2){gdata->player.pos.x, gdata->player.pos.y}, (t_vector2){CELL_SIZE, CELL_SIZE}, -255);
-	draw_line(gdata->buffer, (t_vector2){gdata->player.pos.x + CELL_SIZE / 2, gdata->player.pos.y + CELL_SIZE / 2}, (t_vector2){gdata->player.pos.x + CELL_SIZE /2 + (CELL_SIZE * cos(gdata->player.dirrection)),gdata->player.pos.y + CELL_SIZE / 2 + (CELL_SIZE * sin(gdata->player.dirrection))}, 254);	
+  cast_all_rays(gdata);
 }
