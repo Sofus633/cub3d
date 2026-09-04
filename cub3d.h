@@ -19,6 +19,6 @@
 # define SPACE ' '
 # define TURN_FORCE .01
 # define SPEED .5
-# define FRICTION .995
+# define FRICTION .01
 
 #endif
